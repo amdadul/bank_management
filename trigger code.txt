@@ -1,0 +1,44 @@
+DELIMITER $$
+CREATE TRIGGER initial_balance
+AFTER INSERT
+   ON client FOR EACH ROW
+   BEGIN 
+   
+   INSERT into balance(account_no,balance) VALUES (NEW.account_no,'0');
+   
+   END $$
+
+
+
+
+DELIMITER $$
+CREATE TRIGGER balance_diposit
+AFTER INSERT
+   ON deposit FOR EACH ROW
+   BEGIN 
+   DECLARE B double;
+   DECLARE FB double;
+   
+   SELECT balance INTO @B FROM balance WHERE account_no = NEW.account_no;
+   
+   SET @FB = @B + NEW.amount;
+   
+   UPDATE balance SET balance = @FB WHERE account_no = NEW.account_no;
+   
+   END $$
+
+
+
+
+
+DELIMITER $$
+CREATE TRIGGER trans_diposit
+AFTER INSERT
+   ON deposit FOR EACH ROW
+   BEGIN 
+   DECLARE type varchar(15);
+   SET @type = 'deposit';
+   
+   INSERT INTO transection (trans_id,account_no,trans_type,amount,trans_date) VALUES (NEW.trans_id, NEW.account_no, @type, NEW.amount, NEW.date);
+   
+   END $$
