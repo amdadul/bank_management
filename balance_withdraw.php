@@ -51,6 +51,23 @@ else
 			$err++;
 		}
 
+
+		$sqlb = "select balance from balance where account_no = ".$_POST['account'];
+			if ($result=mysqli_query($cn,$sqlb))
+	  			{
+	  				$row = mysqli_fetch_row($result);
+	  				if($row > 0)
+	  				{
+	  					$bl = $row[0]-$_POST['amount'];
+	  					if($bl<0)
+	  					{
+	  						print '<h2 class="balancee">Insufficient Balance In your Account<h2>';
+	  						$err++;
+	  					}
+	  				}
+	  			}
+
+
 		if($err==0)
 		{
 
@@ -127,6 +144,23 @@ else
 			$errwtype = '<span style="color:red;">* Required</span>';
 			$err++;
 		}
+
+
+		$sqlb = "select balance from balance where account_no = ".$_POST['account'];
+			if ($result=mysqli_query($cn,$sqlb))
+	  			{
+	  				$row = mysqli_fetch_row($result);
+	  				if($row > 0)
+	  				{
+	  					$bl = $row[0]-($_POST['amount']-$amount);
+	  					if($bl<0)
+	  					{
+	  						print '<h2 class="balancee">Insufficient Balance In your Account<h2>';
+	  						$err++;
+	  					}
+	  				}
+	  			}
+
 
 		if($err==0)
 		{

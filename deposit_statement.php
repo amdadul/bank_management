@@ -7,12 +7,27 @@ if(isset($_GET['id']))
 
 			if($result = mysqli_query($cn,$sql))
 			{
-				print '<table class="table">
-	<tr class="th"><th>Date</th><th>Transection Id</th><th>Deposit Slip No</th><th>Amount</th></tr>';
+				print '<table class="table">';
+				if($_SESSION['role']=='ADMIN')
+					{
+						print '<tr class="th"><th>Date</th><th>Transection Id</th><th>Deposit Slip No</th><th>Amount</th><th>Action</th></tr>';
+					}
+					else
+					{
+
+						print '<tr class="th"><th>Date</th><th>Transection Id</th><th>Deposit Slip No</th><th>Amount</th></tr>';
+					}
 
 				while ($row = mysqli_fetch_array($result)) 
 				{
-					print '<tr class="tr"><td>'.$row['date'].'</td><td>'.$row['trans_id'].'</td><td>'.$row['slip_no'].'</td><td>'.$row['amount'].'</td></tr>';
+					if($_SESSION['role']=='ADMIN')
+					{
+						print '<tr class="tr"><td>'.$row['date'].'</td><td>'.$row['trans_id'].'</td><td>'.$row['slip_no'].'</td><td>'.$row['amount'].'</td><td><a class="btn" href="?p=deposit&id='.$row['trans_id'].'">Edit</a></td></tr>';
+					}
+					else
+					{
+						print '<tr class="tr"><td>'.$row['date'].'</td><td>'.$row['trans_id'].'</td><td>'.$row['slip_no'].'</td><td>'.$row['amount'].'</td></tr>';
+					}
 				}
 
 				print '</table>';

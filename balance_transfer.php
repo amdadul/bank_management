@@ -45,6 +45,33 @@ else
 			$err++;
 		}
 
+
+		if($_SESSION['role']=='ADMIN')
+		{
+			$acc = $_POST['account'];
+		}
+		else
+		{
+			$acc = $_SESSION['id'];
+		}
+
+
+		$sqlb = "select balance from balance where account_no = ".$acc;
+			if ($result=mysqli_query($cn,$sqlb))
+	  			{
+	  				$row = mysqli_fetch_row($result);
+	  				if($row > 0)
+	  				{
+	  					$bl = $row[0]-$_POST['amount'];
+	  					if($bl<0)
+	  					{
+	  						print '<h2 class="balancee">Insufficient Balance In your Account<h2>';
+	  						$err++;
+	  					}
+	  				}
+	  			}
+
+
 		if($err==0)
 		{
 
@@ -122,6 +149,30 @@ else
 			$erramount = '<span style="color:red;"> * Required</span>';
 			$err++;
 		}
+
+		if($_SESSION['role']=='ADMIN')
+		{
+			$acc = $_POST['account'];
+		}
+		else
+		{
+			$acc = $_SESSION['id'];
+		}
+
+		$sqlb = "select balance from balance where account_no = ".$acc;
+			if ($result=mysqli_query($cn,$sqlb))
+	  			{
+	  				$row = mysqli_fetch_row($result);
+	  				if($row > 0)
+	  				{
+	  					$bl = $row[0]-($_POST['amount']-$amount);
+	  					if($bl<0)
+	  					{
+	  						print '<h2 class="balancee">Insufficient Balance In your Account<h2>';
+	  						$err++;
+	  					}
+	  				}
+	  			}
 
 
 		if($err==0)
